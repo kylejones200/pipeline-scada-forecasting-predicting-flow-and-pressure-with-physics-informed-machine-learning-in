@@ -26,13 +26,6 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from plot_style import set_tufte_defaults, apply_tufte_style, save_tufte_figure, COLORS
 
-# Import Tufte plotting utilities
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from tda_utils import setup_tufte_plot, TufteColors
-
-
 
 def save_fig(filename):
     """Save plot in the standard minimalist format."""
@@ -128,6 +121,8 @@ def create_main_visualization():
     ax1.spines["right"].set_visible(False)
     ax1.spines["left"].set_position(("outward", 5))
     ax1.spines["bottom"].set_position(("outward", 5))
+    ax1.grid(False)
+    
     ax1.set_title('Flow Rate Forecast', fontsize=12, fontweight="bold", loc="left")
     ax1.set_ylabel('Flow (MMscf/d)', fontsize=10)
     ax1.legend(loc='upper right', frameon=False, fontsize=9)
@@ -140,6 +135,8 @@ def create_main_visualization():
     ax2.spines["right"].set_visible(False)
     ax2.spines["left"].set_position(("outward", 5))
     ax2.spines["bottom"].set_position(("outward", 5))
+    ax2.grid(False)
+    
     ax2.set_title('Suction Pressure Forecast', fontsize=12, fontweight="bold", loc="left")
     ax2.set_ylabel('Pressure (psig)', fontsize=10)
     ax2.legend(loc='upper right', frameon=False, fontsize=9)
@@ -152,6 +149,8 @@ def create_main_visualization():
     ax3.spines["right"].set_visible(False)
     ax3.spines["left"].set_position(("outward", 5))
     ax3.spines["bottom"].set_position(("outward", 5))
+    ax3.grid(False)
+    
     ax3.set_title('Discharge Pressure Forecast', fontsize=12, fontweight="bold", loc="left")
     ax3.set_xlabel('Date', fontsize=10)
     ax3.set_ylabel('Pressure (psig)', fontsize=10)
@@ -181,6 +180,8 @@ def create_accuracy_visualization():
     ax1.spines["right"].set_visible(False)
     ax1.spines["left"].set_position(("outward", 5))
     ax1.spines["bottom"].set_position(("outward", 5))
+    ax1.grid(False)
+    
     ax1.set_title('Forecast Accuracy', fontsize=12, fontweight="bold", loc="left")
     ax1.set_xlabel('Actual', fontsize=10)
     ax1.set_ylabel('Predicted', fontsize=10)
@@ -201,6 +202,8 @@ def create_accuracy_visualization():
     ax2.spines["right"].set_visible(False)
     ax2.spines["left"].set_position(("outward", 5))
     ax2.spines["bottom"].set_position(("outward", 5))
+    ax2.grid(False)
+    
     mae_f = mean_absolute_error(yf, pf)
     mae_ps = mean_absolute_error(yps, pps)
     
