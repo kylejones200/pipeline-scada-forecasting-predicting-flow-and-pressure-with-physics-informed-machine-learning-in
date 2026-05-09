@@ -11,6 +11,12 @@ from sklearn.gaussian_process.kernels import Matern, WhiteKernel, ConstantKernel
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 # Import Tufte plotting utilities
 import sys
 from pathlib import Path
@@ -206,46 +212,46 @@ def enforce_physical_constraints(predictions, actuals):
 
 def main():
     """Run validation tests."""
-    print("=" * 70)
-    print("PIPELINE SCADA FORECASTING - CODE VALIDATION")
-    print("=" * 70)
+    logger.info("=" * 70)
+    logger.info("PIPELINE SCADA FORECASTING - CODE VALIDATION")
+    logger.info("=" * 70)
     
     np.random.seed(3363)
     
-    print("\n1. Testing SCADA data generation...")
+    logger.info("\n1. Testing SCADA data generation...")
     scada = generate_synthetic_scada_data(hours=24*60)  # 60 days for adequate training data
-    print(f"   ✓ Generated {len(scada)} hours of data")
-    print(f"   ✓ Flow range: {scada['flow_mmscfd'].min():.1f} to {scada['flow_mmscfd'].max():.1f} MMscf/d")
-    print(f"   ✓ Avg pressure drop: {(scada['p_suction_psig'] - scada['p_discharge_psig']).mean():.1f} psig")
+    logger.info(f"   ✓ Generated {len(scada)} hours of data")
+    logger.info(f"   ✓ Flow range: {scada['flow_mmscfd'].min():.1f} to {scada['flow_mmscfd'].max():.1f} MMscf/d")
+    logger.info(f"   ✓ Avg pressure drop: {(scada['p_suction_psig'] - scada['p_discharge_psig']).mean():.1f} psig")
     
-    print("\n2. Testing feature engineering...")
+    logger.info("\n2. Testing feature engineering...")
     features = build_forecast_features(scada, lag_hours=[1, 2, 3, 6, 12, 24])
-    print(f"   - Features shape before concat: {features.shape}")
-    print(f"   - NaN count in features: {features.isna().sum().sum()}")
+    logger.info(f"   - Features shape before concat: {features.shape}")
+    logger.info(f"   - NaN count in features: {features.isna().sum().sum()}")
     targets = scada[['flow_mmscfd', 'p_suction_psig', 'p_discharge_psig']]
-    print(f"   - Targets shape: {targets.shape}")
+    logger.info(f"   - Targets shape: {targets.shape}")
     dataset = pd.concat([features, targets], axis=1)
-    print(f"   - Dataset shape before dropna: {dataset.shape}")
+    logger.info(f"   - Dataset shape before dropna: {dataset.shape}")
     dataset = dataset.dropna()
-    print(f"   ✓ Features created: {features.shape[1]}")
-    print(f"   ✓ Dataset size after dropna: {len(dataset)}")
-    print(f"   ✓ Feature categories: lags, exogenous, temporal")
+    logger.info(f"   ✓ Features created: {features.shape[1]}")
+    logger.info(f"   ✓ Dataset size after dropna: {len(dataset)}")
+    logger.info(f"   ✓ Feature categories: lags, exogenous, temporal")
     
-    print("\n3. Testing model training...")
+    logger.info("\n3. Testing model training...")
     results = train_pipeline_forecast_models(dataset, test_hours=24*7)
-    print(f"   ✓ Flow MAE: {results['metrics']['flow']['mae']:.2f} MMscf/d")
-    print(f"   ✓ Suction MAE: {results['metrics']['p_suction']['mae']:.2f} psig")
-    print(f"   ✓ Discharge MAE: {results['metrics']['p_discharge']['mae']:.2f} psig")
+    logger.info(f"   ✓ Flow MAE: {results['metrics']['flow']['mae']:.2f} MMscf/d")
+    logger.info(f"   ✓ Suction MAE: {results['metrics']['p_suction']['mae']:.2f} psig")
+    logger.info(f"   ✓ Discharge MAE: {results['metrics']['p_discharge']['mae']:.2f} psig")
     
-    print("\n4. Testing constraint enforcement...")
+    logger.info("\n4. Testing constraint enforcement...")
     constrained = enforce_physical_constraints(results['predictions'], results['actuals'])
-    print(f"   ✓ Raw violations: {constrained['raw_violations']['discharge_exceeds_suction']}")
-    print(f"   ✓ Post-constraint violations: {constrained['post_violations']['discharge_exceeds_suction']}")
-    print(f"   ✓ Accuracy impact: {constrained['accuracy_impact']:.2f} psig")
+    logger.info(f"   ✓ Raw violations: {constrained['raw_violations']['discharge_exceeds_suction']}")
+    logger.info(f"   ✓ Post-constraint violations: {constrained['post_violations']['discharge_exceeds_suction']}")
+    logger.info(f"   ✓ Accuracy impact: {constrained['accuracy_impact']:.2f} psig")
     
-    print("\n" + "=" * 70)
-    print("ALL TESTS PASSED! ✓")
-    print("=" * 70)
+    logger.info("\n" + "=" * 70)
+    logger.info("ALL TESTS PASSED! ✓")
+    logger.info("=" * 70)
 
 if __name__ == "__main__":
     main()
