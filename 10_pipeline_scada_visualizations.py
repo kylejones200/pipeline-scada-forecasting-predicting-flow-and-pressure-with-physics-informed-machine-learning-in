@@ -118,109 +118,111 @@ def train_models(df):
     
     return test.index, test['flow'].values, pred_f, test['p_suction'].values, pred_ps, test['p_discharge'].values, pred_pd
 
-def create_main_visualization():
+def create_main_visualization(plot: bool = False):
     """Create main SCADA forecasting visualization."""
     np.random.seed(3363)
     df = generate_scada_data(hours=24*60)
     tidx, yf, pf, yps, pps, ypd, ppd = train_models(df)
     
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
+    if plot:
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 9), sharex=True)
     
     # Flow panel
-    ax1.plot(tidx, yf, color='black', linewidth=1.5, label='Actual')
-    ax1.plot(tidx, pf, color='gray', linewidth=1.5, linestyle='--', label='Forecast')
+        ax1.plot(tidx, yf, color='black', linewidth=1.5, label='Actual')
+        ax1.plot(tidx, pf, color='gray', linewidth=1.5, linestyle='--', label='Forecast')
     
-    ax1.spines["top"].set_visible(False)
-    ax1.spines["right"].set_visible(False)
-    ax1.spines["left"].set_position(("outward", 5))
-    ax1.spines["bottom"].set_position(("outward", 5))
-    ax1.set_title('Flow Rate Forecast', fontsize=12, fontweight="bold", loc="left")
-    ax1.set_ylabel('Flow (MMscf/d)', fontsize=10)
-    ax1.legend(loc='upper right', frameon=False, fontsize=9)
+        ax1.spines["top"].set_visible(False)
+        ax1.spines["right"].set_visible(False)
+        ax1.spines["left"].set_position(("outward", 5))
+        ax1.spines["bottom"].set_position(("outward", 5))
+        ax1.set_title('Flow Rate Forecast', fontsize=12, fontweight="bold", loc="left")
+        ax1.set_ylabel('Flow (MMscf/d)', fontsize=10)
+        ax1.legend(loc='upper right', frameon=False, fontsize=9)
     
     # Suction pressure panel
-    ax2.plot(tidx, yps, color='black', linewidth=1.5, label='Actual')
-    ax2.plot(tidx, pps, color='gray', linewidth=1.5, linestyle='--', label='Forecast')
+        ax2.plot(tidx, yps, color='black', linewidth=1.5, label='Actual')
+        ax2.plot(tidx, pps, color='gray', linewidth=1.5, linestyle='--', label='Forecast')
     
-    ax2.spines["top"].set_visible(False)
-    ax2.spines["right"].set_visible(False)
-    ax2.spines["left"].set_position(("outward", 5))
-    ax2.spines["bottom"].set_position(("outward", 5))
-    ax2.set_title('Suction Pressure Forecast', fontsize=12, fontweight="bold", loc="left")
-    ax2.set_ylabel('Pressure (psig)', fontsize=10)
-    ax2.legend(loc='upper right', frameon=False, fontsize=9)
+        ax2.spines["top"].set_visible(False)
+        ax2.spines["right"].set_visible(False)
+        ax2.spines["left"].set_position(("outward", 5))
+        ax2.spines["bottom"].set_position(("outward", 5))
+        ax2.set_title('Suction Pressure Forecast', fontsize=12, fontweight="bold", loc="left")
+        ax2.set_ylabel('Pressure (psig)', fontsize=10)
+        ax2.legend(loc='upper right', frameon=False, fontsize=9)
     
     # Discharge pressure panel
-    ax3.plot(tidx, ypd, color='black', linewidth=1.5, label='Actual')
-    ax3.plot(tidx, ppd, color='gray', linewidth=1.5, linestyle='--', label='Forecast')
+        ax3.plot(tidx, ypd, color='black', linewidth=1.5, label='Actual')
+        ax3.plot(tidx, ppd, color='gray', linewidth=1.5, linestyle='--', label='Forecast')
     
-    ax3.spines["top"].set_visible(False)
-    ax3.spines["right"].set_visible(False)
-    ax3.spines["left"].set_position(("outward", 5))
-    ax3.spines["bottom"].set_position(("outward", 5))
-    ax3.set_title('Discharge Pressure Forecast', fontsize=12, fontweight="bold", loc="left")
-    ax3.set_xlabel('Date', fontsize=10)
-    ax3.set_ylabel('Pressure (psig)', fontsize=10)
-    ax3.legend(loc='upper right', frameon=False, fontsize=9)
+        ax3.spines["top"].set_visible(False)
+        ax3.spines["right"].set_visible(False)
+        ax3.spines["left"].set_position(("outward", 5))
+        ax3.spines["bottom"].set_position(("outward", 5))
+        ax3.set_title('Discharge Pressure Forecast', fontsize=12, fontweight="bold", loc="left")
+        ax3.set_xlabel('Date', fontsize=10)
+        ax3.set_ylabel('Pressure (psig)', fontsize=10)
+        ax3.legend(loc='upper right', frameon=False, fontsize=9)
     
-    save_fig('10_pipeline_scada_main.png')
+        save_fig('10_pipeline_scada_main.png')
     logger.info("✓ Created: 10_pipeline_scada_main.png")
 
-def create_accuracy_visualization():
+def create_accuracy_visualization(plot: bool = False):
     """Create forecast accuracy visualization."""
     np.random.seed(3363)
     df = generate_scada_data(hours=24*60)
     tidx, yf, pf, yps, pps, ypd, ppd = train_models(df)
     
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+    if plot:
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
     
     # Scatter: Actual vs Predicted
-    ax1.scatter(yf, pf, s=30, alpha=0.6, color='white', edgecolors='black', linewidths=0.8, label='Flow')
-    ax1.scatter(yps, pps, s=30, alpha=0.6, color='gray', edgecolors='black', linewidths=0.8, marker='s', label='Suction P')
+        ax1.scatter(yf, pf, s=30, alpha=0.6, color='white', edgecolors='black', linewidths=0.8, label='Flow')
+        ax1.scatter(yps, pps, s=30, alpha=0.6, color='gray', edgecolors='black', linewidths=0.8, marker='s', label='Suction P')
     
     # Perfect prediction line
-    all_vals = np.concatenate([yf, yps])
-    min_val, max_val = all_vals.min(), all_vals.max()
-    ax1.plot([min_val, max_val], [min_val, max_val], 'k--', linewidth=1.5, label='Perfect')
+        all_vals = np.concatenate([yf, yps])
+        min_val, max_val = all_vals.min(), all_vals.max()
+        ax1.plot([min_val, max_val], [min_val, max_val], 'k--', linewidth=1.5, label='Perfect')
     
-    ax1.spines["top"].set_visible(False)
-    ax1.spines["right"].set_visible(False)
-    ax1.spines["left"].set_position(("outward", 5))
-    ax1.spines["bottom"].set_position(("outward", 5))
-    ax1.set_title('Forecast Accuracy', fontsize=12, fontweight="bold", loc="left")
-    ax1.set_xlabel('Actual', fontsize=10)
-    ax1.set_ylabel('Predicted', fontsize=10)
-    ax1.legend(loc='upper left', frameon=False, fontsize=9)
-    ax1.set_aspect('equal')
+        ax1.spines["top"].set_visible(False)
+        ax1.spines["right"].set_visible(False)
+        ax1.spines["left"].set_position(("outward", 5))
+        ax1.spines["bottom"].set_position(("outward", 5))
+        ax1.set_title('Forecast Accuracy', fontsize=12, fontweight="bold", loc="left")
+        ax1.set_xlabel('Actual', fontsize=10)
+        ax1.set_ylabel('Predicted', fontsize=10)
+        ax1.legend(loc='upper left', frameon=False, fontsize=9)
+        ax1.set_aspect('equal')
     
     # Residual distribution
-    res_f = yf - pf
-    res_ps = yps - pps
+        res_f = yf - pf
+        res_ps = yps - pps
     
-    bins = np.linspace(-15, 15, 25)
-    ax2.hist(res_f, bins=bins, alpha=0.7, color='white', edgecolor='black', linewidth=1.5, label='Flow')
-    ax2.hist(res_ps, bins=bins, alpha=0.7, color='gray', edgecolor='black', linewidth=1.5, label='Pressure')
+        bins = np.linspace(-15, 15, 25)
+        ax2.hist(res_f, bins=bins, alpha=0.7, color='white', edgecolor='black', linewidth=1.5, label='Flow')
+        ax2.hist(res_ps, bins=bins, alpha=0.7, color='gray', edgecolor='black', linewidth=1.5, label='Pressure')
     
-    ax2.axvline(x=0, color='black', linestyle='--', linewidth=1.5)
+        ax2.axvline(x=0, color='black', linestyle='--', linewidth=1.5)
     
-    ax2.spines["top"].set_visible(False)
-    ax2.spines["right"].set_visible(False)
-    ax2.spines["left"].set_position(("outward", 5))
-    ax2.spines["bottom"].set_position(("outward", 5))
-    mae_f = mean_absolute_error(yf, pf)
-    mae_ps = mean_absolute_error(yps, pps)
+        ax2.spines["top"].set_visible(False)
+        ax2.spines["right"].set_visible(False)
+        ax2.spines["left"].set_position(("outward", 5))
+        ax2.spines["bottom"].set_position(("outward", 5))
+        mae_f = mean_absolute_error(yf, pf)
+        mae_ps = mean_absolute_error(yps, pps)
     
-    stats_text = f'Flow MAE: {mae_f:.1f}\nPressure MAE: {mae_ps:.1f}'
-    ax2.text(0.95, 0.95, stats_text, transform=ax2.transAxes,
-            fontsize=10, verticalalignment='top', horizontalalignment='right',
-            bbox=dict(boxstyle='round', facecolor='white', edgecolor='black', linewidth=1))
+        stats_text = f'Flow MAE: {mae_f:.1f}\nPressure MAE: {mae_ps:.1f}'
+        ax2.text(0.95, 0.95, stats_text, transform=ax2.transAxes,
+                fontsize=10, verticalalignment='top', horizontalalignment='right',
+                bbox=dict(boxstyle='round', facecolor='white', edgecolor='black', linewidth=1))
     
-    ax2.set_title('Forecast Residuals', fontsize=12, fontweight="bold", loc="left")
-    ax2.set_xlabel('Residual (Actual - Predicted)', fontsize=10)
-    ax2.set_ylabel('Frequency', fontsize=10)
-    ax2.legend(loc='upper left', frameon=False, fontsize=9)
+        ax2.set_title('Forecast Residuals', fontsize=12, fontweight="bold", loc="left")
+        ax2.set_xlabel('Residual (Actual - Predicted)', fontsize=10)
+        ax2.set_ylabel('Frequency', fontsize=10)
+        ax2.legend(loc='upper left', frameon=False, fontsize=9)
     
-    save_fig('10_pipeline_scada_accuracy.png')
+        save_fig('10_pipeline_scada_accuracy.png')
     logger.info("✓ Created: 10_pipeline_scada_accuracy.png")
 
 def main():
