@@ -70,7 +70,9 @@ def create_lagged_features(series, lag_hours):
         lag_features[f'{series.name}_lag{lag}h'] = series.shift(lag)
     return pd.DataFrame(lag_features)
 
-def build_forecast_features(scada_data, lag_hours=[1, 2, 3, 6, 12, 24]):
+def build_forecast_features(scada_data, lag_hours=None):
+    if lag_hours is None:
+        lag_hours = [1, 2, 3, 6, 12, 24]
     """Build comprehensive feature matrix for forecasting."""
     lagged_flow = create_lagged_features(scada_data['flow_mmscfd'], lag_hours)
     lagged_p_suction = create_lagged_features(scada_data['p_suction_psig'], lag_hours)
