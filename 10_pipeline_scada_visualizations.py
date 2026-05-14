@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import signalplot
 import sys
 import os
 
@@ -8,9 +9,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-# Add parent directory to path to import plot_style
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from plot_style import set_tufte_defaults, apply_tufte_style, save_tufte_figure, COLORS
 
 """
 Generate visualizations for Pipeline SCADA Forecasting blog post.
@@ -26,22 +24,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 
-# Add parent directory to path to import plot_style
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import Tufte plotting utilities
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from tda_utils import setup_tufte_plot, TufteColors
-
-
-
-def save_fig(filename):
-    """Save plot in the standard minimalist format."""
-    plt.tight_layout()
-    plt.savefig(filename, dpi=300, bbox_inches="tight")
-    plt.close()
-
 def generate_scada_data(hours=1440, seed=3363):
     """Generate realistic pipeline SCADA telemetry."""
     rng = np.random.default_rng(seed)
@@ -160,7 +144,7 @@ def create_main_visualization(plot: bool = False):
         ax3.set_ylabel('Pressure (psig)', fontsize=10)
         ax3.legend(loc='upper right', frameon=False, fontsize=9)
     
-        save_fig('10_pipeline_scada_main.png')
+        signalplot.save('10_pipeline_scada_main.png')
     logger.info("✓ Created: 10_pipeline_scada_main.png")
 
 def create_accuracy_visualization(plot: bool = False):
@@ -218,16 +202,15 @@ def create_accuracy_visualization(plot: bool = False):
         ax2.set_ylabel('Frequency', fontsize=10)
         ax2.legend(loc='upper left', frameon=False, fontsize=9)
     
-        save_fig('10_pipeline_scada_accuracy.png')
+        signalplot.save('10_pipeline_scada_accuracy.png')
     logger.info("✓ Created: 10_pipeline_scada_accuracy.png")
 
 def main():
     """Generate all visualizations."""
-    set_tufte_defaults()
+    signalplot.apply(font_family='serif')
     logger.info("PIPELINE SCADA FORECASTING - VISUALIZATION GENERATION")
     logger.info()
     
-    plt.rcParams['font.family'] = 'serif'
     
     logger.info("Creating visualizations...")
     create_main_visualization()
