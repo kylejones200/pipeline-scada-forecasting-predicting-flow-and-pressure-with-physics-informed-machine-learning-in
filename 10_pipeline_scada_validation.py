@@ -212,9 +212,7 @@ def enforce_physical_constraints(predictions, actuals):
 
 def main():
     """Run validation tests."""
-    logger.info("=" * 70)
     logger.info("PIPELINE SCADA FORECASTING - CODE VALIDATION")
-    logger.info("=" * 70)
     
     np.random.seed(3363)
     
@@ -249,9 +247,7 @@ def main():
     logger.info(f"   ✓ Post-constraint violations: {constrained['post_violations']['discharge_exceeds_suction']}")
     logger.info(f"   ✓ Accuracy impact: {constrained['accuracy_impact']:.2f} psig")
     
-    logger.info("\n" + "=" * 70)
-    logger.info("ALL TESTS PASSED! ✓")
-    logger.info("=" * 70)
+    logger.info("=== ALL TESTS PASSED! ✓ ===")
 
 if __name__ == "__main__":
     main()

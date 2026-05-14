@@ -228,9 +228,7 @@ def create_accuracy_visualization(plot: bool = False):
 def main():
     """Generate all visualizations."""
     set_tufte_defaults()
-    logger.info("=" * 60)
     logger.info("PIPELINE SCADA FORECASTING - VISUALIZATION GENERATION")
-    logger.info("=" * 60)
     logger.info()
     
     plt.rcParams['font.family'] = 'serif'
@@ -240,9 +238,7 @@ def main():
     create_accuracy_visualization()
     
     logger.info()
-    logger.info("=" * 60)
     logger.info("All visualizations created successfully!")
-    logger.info("=" * 60)
 
 if __name__ == "__main__":
     main()
