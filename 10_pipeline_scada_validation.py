@@ -17,8 +17,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-import sys
-from pathlib import Path
 def generate_synthetic_scada_data(hours=672, seed=3363):
     """Generate realistic pipeline SCADA telemetry."""
     rng = np.random.default_rng(seed)
@@ -230,7 +228,7 @@ def main():
     dataset = dataset.dropna()
     logger.info(f"   ✓ Features created: {features.shape[1]}")
     logger.info(f"   ✓ Dataset size after dropna: {len(dataset)}")
-    logger.info(f"   ✓ Feature categories: lags, exogenous, temporal")
+    logger.info("   ✓ Feature categories: lags, exogenous, temporal")
     
     logger.info("\n3. Testing model training...")
     results = train_pipeline_forecast_models(dataset, test_hours=24*7)

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import signalplot
-import sys
-import os
 
 import logging
 logging.basicConfig(
@@ -21,11 +19,10 @@ import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern, WhiteKernel, ConstantKernel
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error
 
 
 
-from pathlib import Path
 def generate_scada_data(hours=1440, seed=3363):
     """Generate realistic pipeline SCADA telemetry."""
     rng = np.random.default_rng(seed)
@@ -195,7 +192,7 @@ def create_accuracy_visualization(plot: bool = False):
         stats_text = f'Flow MAE: {mae_f:.1f}\nPressure MAE: {mae_ps:.1f}'
         ax2.text(0.95, 0.95, stats_text, transform=ax2.transAxes,
                 fontsize=10, verticalalignment='top', horizontalalignment='right',
-                bbox=dict(boxstyle='round', facecolor='white', edgecolor='black', linewidth=1))
+                bbox={'boxstyle': 'round', 'facecolor': 'white', 'edgecolor': 'black', 'linewidth': 1})
     
         ax2.set_title('Forecast Residuals', fontsize=12, fontweight="bold", loc="left")
         ax2.set_xlabel('Residual (Actual - Predicted)', fontsize=10)
